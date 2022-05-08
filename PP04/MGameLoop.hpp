@@ -2,6 +2,7 @@
 #include <chrono>
 #include <thread>
 #include "MConsolUtil.hpp"
+#include "Player.hpp"
 
 using namespace std;
 
@@ -12,6 +13,10 @@ namespace MuSeoun_Engine
 	private:
 		bool _isGameRunning;
 		MConsoleRenderer cRenderer;
+		chrono::system_clock::time_point startRenderTimePoint;
+		chrono::duration<double> renderDuration;
+		Player p;
+		MObject m;
 
 	public:
 		MGameLoop() { _isGameRunning = false; }
@@ -22,11 +27,14 @@ namespace MuSeoun_Engine
 			_isGameRunning = true;
 			Initialize();
 
+			startRenderTimePoint = chrono::system_clock::now();
 			while (_isGameRunning)
 			{
+
 				Input();
 				Update();
 				Render();
+
 			}
 			Release();
 		}
@@ -46,34 +54,71 @@ namespace MuSeoun_Engine
 
 		void Input()
 		{
-			/*	if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_SPACE) & 0x8001)
-				{
-
-				}
-				else
-				{
-
-				}*/
+			if (GetAsyncKeyState(VK_SPACE) & 0x8000 || GetAsyncKeyState(VK_SPACE) & 0x8001)
+			{
+				p.isKeyPressed();
+			}
+			else
+			{
+				p.isKeyUnpressed();
+			}
 
 		}
 		void Update()
 		{
+			//if (_isGameRunning)
+			//{	
+			//	m.posX -= 1;
+			//	if (m.posX < 10)
+			//	{
+			//		m.posX = 50;
+			//	}
+			//}
+
+			if (m.posX != p.x || m.posY != p.y)
+			{
+				m.posX-=1;
+				if (m.posX < 10)
+				{
+					m.posX = 50;
+				}
+			}
+
+
 			
 		}
 		void Render()
 		{
-			chrono::system_clock::time_point startRenderTimePoint = chrono::system_clock::now();
 
 			cRenderer.Clear();
+
+
+			cRenderer.MoveCursor(p.x, p.y);
+			cRenderer.DrawString("P");
+			
+			cRenderer.MoveCursor(m.posX, m.posY);
+			cRenderer.DrawString("M");
+
+			if (p.x == m.posX && p.y == m.posY)
+			{   
+				cRenderer.MoveCursor(20, 15);
+				cRenderer.DrawString("WOOOOOOW");
+				Stop();
+			}
+
+
 			cRenderer.MoveCursor(10, 20);
 
-			
-			chrono::milliseconds fps = std::chrono::duration_cast<std::chrono::milliseconds>(chrono::system_clock::now() - startRenderTimePoint);
 
-			string FPS = "FPS(milliseconds) " + to_string(1000.0f/fps.count());
-			cRenderer.DrawString(FPS);
+
+			renderDuration = chrono::system_clock::now() - startRenderTimePoint;
+			startRenderTimePoint = chrono::system_clock::now();
+			string fps = "FPS : " + to_string(1.0 / renderDuration.count());
+			cRenderer.DrawString(fps);
+
+			this_thread::sleep_for(chrono::milliseconds(20));
 		}
-		/*std::chrono::milliseconds mill = std::chrono::duration_cast<std::chrono::milliseconds>(EndTime - StartTime);*/
+
 
 		////cout << "Rendering speed : " << renderDuration.count() << "sec" << endl;
 
