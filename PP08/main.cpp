@@ -4,7 +4,11 @@
 
 #include <stdio.h>
 
+#include <math.h>
+
 #include<windows.h>
+
+#define Pi 3.1415
 
 #define GLUT_KEY_UP 101
 
@@ -32,6 +36,7 @@ static void key_callback(GLFWwindow* window, int key, int scancode, int action, 
 
 }
 
+
 void main()
 
 {
@@ -44,7 +49,7 @@ void main()
 
         exit(EXIT_FAILURE);
 
-    window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+    window = glfwCreateWindow(700, 700, "Simple example", NULL, NULL);
 
     if (!window)
 
@@ -74,135 +79,33 @@ void main()
 
         ratio = width / (float)height;
 
+        
 
 
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
+        glClear(GL_COLOR_BUFFER_BIT);     
 
-        glClearColor(0.7f, 0.7f, 0.7f, 1); //색깔 회색
+        glColor3f(0.0f, 0.0f, 1.0f);
 
-        glClear(GL_COLOR_BUFFER_BIT);     //색깔 나타냄
-
-
-        glBegin(GL_TRIANGLES);
-
-        glColor3f(1.0f, 0.0f, 0.0f);
-
-        glVertex2f(0.0f, 0.0f);
-
-        glVertex2f(-0.1f, -0.1f);
-
-        glVertex2f(0.1f, -0.1f);
+        double rad = 1.0;       //radius(반지름)의 크기를 1로 고정
+        glBegin(GL_LINE_STRIP); //LINE_STRIP으로 직선으로 만든다
+            for (int i = 0; i < 360; i++) // 원의 각도가 360도 이므로 
+            {
+                double angle, x, y;
+                angle = i * 3.141592 / 180; //ANGLE(각도)를 맞춘다. 각도 * π/180
+                x = rad * cos(angle);    
+                y = rad * sin(angle);   
+                glVertex2f(x, y);
+            }
 
         glEnd();
-
-
-        if (GetAsyncKeyState(VK_SPACE) & 0x8000)
-        {
-            glBegin(GL_TRIANGLES);
-
-            glColor3f(0.0f, 0.51f, 0.0f);
-
-            glVertex2f(-0.5f, 0.3f);
-
-            glVertex2f(-0.5f, 0.1f);
-
-            glVertex2f(-0.7f, 0.1f);
-
-            glEnd();
-
-            glBegin(GL_TRIANGLES);
-
-            glColor3f(0.0f, 0.51f, 0.0f);
-
-            glVertex2f(-0.5f, 0.3f);
-
-            glVertex2f(-0.7f, 0.3f);
-
-            glVertex2f(-0.7f, 0.1f);
-
-            glEnd();
-
-        }
-        else
-        {
-            glBegin(GL_TRIANGLES);
-
-            glColor3f(0.0f, 0.51f, 0.0f);
-
-            glVertex2f(-0.5f, 0.0f);
-
-            glVertex2f(-0.5f, -0.2f);
-
-            glVertex2f(-0.7f, -0.2f);
-
-            glEnd();
-
-            glBegin(GL_TRIANGLES);
-
-            glColor3f(0.0f, 0.51f, 0.0f);
-
-            glVertex2f(-0.5f, 0.0f);
-
-            glVertex2f(-0.7f, 0.0f);
-
-            glVertex2f(-0.7f, -0.2f);
-
-            glEnd();
-        }
+        glFinish();
 
 
 
 
 
-
-
-
-
-
-        //glBegin(GL_LINES);              //선을 그을거임          
-
-        //glColor3f(1.0f, 0.0f, 0.0f);    //빨간색
-
-        //glVertex2f(0.0f, 0.0f);         //0,0    
-
-        //glVertex2f(1.0f, 1.0f);         //1,1
-
-        //glColor3f(0.0f, 0.0f, 1.0f);    // 두번째 선을 그을거임 색깔
-
-        //glVertex2f(0.0f, 0.0f);         //0,0
-
-        //glVertex2f(1.0f, -1.0f);        //1,-1
-
-        //glEnd();
-
-        //glFlush();
-
-
-        //glBegin(GL_POINT);            //점을 찍을거임
-
-        //glColor3f(1.0f, 0.0f, 0.0f);  //색깔 빨간색
-
-        //glVertex2f(0.0f,0.0f);        //0,0에 찍을거임
-
-        //glEnd();
-
-
-
-        //glBegin(GL_LINES);              //선을 그을거임          
-
-        //glColor3f(1.0f, 0.0f, 0.0f);    //빨간색
-
-        //glVertex2f(0.0f, 0.0f);         //0,0    
-
-        //glVertex2f(1.0f, 1.0f);         //1,1
-
-        //glColor3f(0.0f, 0.0f, 1.0f);    // 두번째 선을 그을거임 색깔
-
-        //glVertex2f(0.0f, 0.0f);         //0,0
-
-        //glVertex2f(1.0f, -1.0f);        //1,-1
-
-        //glEnd();
 
 
 
